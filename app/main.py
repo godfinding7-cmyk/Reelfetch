@@ -482,7 +482,8 @@ async def analyze(body: AnalyzeBody, request: Request):
         "url": url,
         "title": result.get("title") or "media",
         "heights": [f.get("height") for f in result.get("formats", [])],
-        "thumbnail": result.get("thumbnail") if _media_url_allowed(result.get("thumbnail") or "") else None, "direct_video": (
+        "thumbnail": result.get("thumbnail") if _media_url_allowed(result.get("thumbnail") or "") else None, 
+        "direct_video": (
     result.get("direct_video")
     if _media_url_allowed(result.get("direct_video") or "")
     else None
