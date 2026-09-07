@@ -419,7 +419,7 @@ async def analyze(body: AnalyzeBody, request: Request):
         except Exception:
             pass
 
-    if not result:
+    
         message = "Could not fetch this public post right now. Instagram may be rate-limiting the server, the post may require login, or the URL may be unavailable."
         if os.getenv("DEBUG_ERRORS") == "1" and primary_error:
             message += " " + primary_error[:240]
