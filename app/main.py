@@ -452,7 +452,12 @@ async def analyze(body: AnalyzeBody, request: Request):
             "duration": duration,
             "formats": _format_options(info),
             "media": media,
-            "direct_video": _best_direct_video_url(info),
+            "direct_video": (
+    _best_direct_video_url(info)
+    if "facebook.com" in (urlparse(url).hostname or "").lower()
+    or (urlparse(url).hostname or "").lower() == "fb.watch"
+    else None
+)),
             "extractor": info.get("extractor_key") or info.get("extractor") or "yt-dlp",
         }
     except HTTPException:
