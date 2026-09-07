@@ -203,7 +203,59 @@ def _format_options(info: dict[str, Any]) -> list[dict[str, Any]]:
             "fps": f.get("fps"),
             "filesize": f.get("filesize") or f.get("filesize_approx"),
         })
-    return out
+        return out
+
+
+def _best_direct_video_url(info: dict[str, Any]) -> str | None:
+    candidates = []
+
+    direct = info.get("url")
+    if direct and _media_url_allowed(direct):
+        candidates.append({
+            "url": direct,
+            "audio": info.get("acodec") not in {None, "none"},
+            "height": info.get("height") or 0,
+            "tbr": info.get("tbr") or 0,
+            "ext": info.get("ext") or "",
+        })
+
+    for f in info.get("formats") or []:
+        if not isinstance(f, dict):
+            continue
+
+        url = f.get("url")
+
+        if not url or not _media_url_allowed(url):
+            continue
+
+        if f.get("vcodec") in {None, "none"}:
+            continue
+
+        candidates.append({
+            "url": url,
+            "audio": f.get("acodec") not in {None, "none"},
+            "height": f.get("height") or 0,
+            "tbr": f.get("tbr") or 0,
+            "ext": f.get("ext") or "",
+        })
+
+    if not candidates:
+        return None
+
+    candidates.sort(
+        key=lambda x: (
+            1 if x["audio"] else 0,
+            1 if x["ext"] == "mp4" else 0,
+            x["height"],
+            x["tbr"],
+        ),
+        reverse=True,
+    )
+
+    return candidates[0]["url"]
+
+
+def _safe_title(info: dict[str, Any]) -> str:
 
 
 def _safe_title(info: dict[str, Any]) -> str:
