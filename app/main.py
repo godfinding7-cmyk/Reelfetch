@@ -568,6 +568,25 @@ def _download_with_ytdlp(url: str, title: str, height: int | None, audio_only: b
 async def download_video(token: str, request: Request, height: str = "original"):
     _check_rate(f"d:{_client_ip(request)}", DOWNLOAD_LIMIT_PER_HOUR)
     data = _load_token(token)
+        if height == "original":
+        direct_video = data.get("direct_video")
+
+        if direct_video and _media_url_allowed(direct_video):
+            source_host = (urlparse(data.get("url", "")).hostname or "").lower()
+
+            if "facebook.com" in source_host or source_host == "fb.watch":
+                referer = "https://www.facebook.com/"
+            else:
+                referer = "https://www.instagram.com/"
+
+            try:
+                return await _proxy_media(
+                    direct_video,
+                    f"{APP_NAME.lower()}-video.mp4",
+                    referer=referer,
+                )
+            except HTTPException:
+                pass
     allowed = data.get("heights") or []
     selected: int | None
     if height == "original":
@@ -607,10 +626,18 @@ async def download_audio(token: str, request: Request):
     return FileResponse(file, filename=file.name, media_type="audio/mpeg", background=bg)
 
 
-async def _proxy_media(url: str, attachment_name: str | None = None):
+async def _proxy_media(
+    url: str,
+    attachment_name: str | None = None,
+    referer: str = "https://www.instagram.com/",
+):
     if not _media_url_allowed(url):
         raise HTTPException(400, "Media URL is not allowed.")
-    headers = {"User-Agent": "Mozilla/5.0", "Referer": "https://www.instagram.com/"}
+    headers = {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 15; Mobile) AppleWebKit/537.36 Chrome/139.0 Mobile Safari/537.36",
+    "Accept": "*/*",
+    "Referer": referer,
+}
     client = httpx.AsyncClient(timeout=30, follow_redirects=True, headers=headers)
     try:
         r = await client.send(client.build_request("GET", url), stream=True)
