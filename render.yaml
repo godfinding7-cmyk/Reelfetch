@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: reelfetch
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: INSTAGRAM_COOKIES_B64
+        sync: false
