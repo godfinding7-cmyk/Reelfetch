@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Download public Instagram reels and videos you own or have permission to save. Fast preview, available quality options and MP3 extraction.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#0b1020">
+  <title>{{ title }} — {{ app_name }}</title>
+  {% if canonical %}<link rel="canonical" href="{{ canonical }}">{% endif %}
+  <link rel="stylesheet" href="/static/styles.css?v=1">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"{{ app_name }}","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body data-mode="{{ mode }}">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="{{ app_name }} home"><span class="brand-mark">R</span><span>{{ app_name }}</span></a>
+  <nav class="nav" aria-label="Tools">
+    <a class="{{ 'active' if mode=='reels' else '' }}" href="/">Reels</a>
+    <a class="{{ 'active' if mode=='video' else '' }}" href="/video">Video</a>
+    <a class="{{ 'active' if mode=='photo' else '' }}" href="/photo">Photo</a>
+    <a class="{{ 'active' if mode=='audio' else '' }}" href="/audio">Audio</a>
+    <a class="{{ 'active' if mode=='facebook' else '' }}" href="/facebook">Facebook</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="orb orb-a"></div><div class="orb orb-b"></div>
+    <div class="hero-inner">
+      <span class="eyebrow">FAST • PRIVATE • NO SIGN-UP</span>
+      <h1>{{ title }}</h1>
+      <p>{{ subtitle }}</p>
+
+      <form id="download-form" class="tool-card" novalidate>
+        <div class="input-row">
+          <div class="url-wrap">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10.6 13.4a1 1 0 0 1 0-1.4l3.4-3.4a4 4 0 0 1 5.7 5.7l-3 3a4 4 0 0 1-5.7 0 1 1 0 1 1 1.4-1.4 2 2 0 0 0 2.9 0l3-3a2 2 0 0 0-2.9-2.9L12 13.4a1 1 0 0 1-1.4 0Zm2.8-2.8a1 1 0 0 1 0 1.4L10 15.4a4 4 0 1 1-5.7-5.7l3-3a4 4 0 0 1 5.7 0 1 1 0 0 1-1.4 1.4 2 2 0 0 0-2.9 0l-3 3A2 2 0 1 0 8.6 14l3.4-3.4a1 1 0 0 1 1.4 0Z"/></svg>
+            <input id="media-url" name="url" type="url" inputmode="url" autocomplete="off" placeholder="Paste Instagram or Facebook link…" aria-label="Media URL" required>
+            <button id="paste-btn" type="button" class="paste-btn">Paste</button>
+          </div>
+          <button id="analyze-btn" class="primary-btn" type="submit"><span>Get Download</span><span class="arrow">→</span></button>
+        </div>
+        <p class="microcopy">Use this tool only for content you own or have permission to download. Public links only.</p>
+      </form>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+
+      <section id="result" class="result-card" hidden>
+        <div class="preview-shell">
+          <img id="thumb" alt="Media preview" loading="eager">
+          <span id="duration" class="duration" hidden></span>
+        </div>
+        <div class="result-main">
+          <span class="result-kicker">MEDIA READY</span>
+          <h2 id="result-title">Ready to download</h2>
+          <p id="uploader" class="muted"></p>
+          <div id="quality-list" class="quality-grid"></div>
+          <div id="media-list" class="quality-grid"></div>
+          <div class="action-row">
+            <a id="audio-btn" class="secondary-btn" href="#" hidden>Download MP3</a>
+          </div>
+          <p class="rights-note">By downloading, you confirm that you have the necessary rights or permission.</p>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <div class="ad-slot" aria-label="Advertisement placeholder"><span>Advertisement</span></div>
+
+  <section class="content-wrap">
+    <div class="trust-grid">
+      <article><span class="icon">⚡</span><h3>Quick fetch</h3><p>Paste a public link and see available media choices without creating an account.</p></article>
+      <article><span class="icon">◈</span><h3>Available quality</h3><p>The server reports qualities exposed by the source instead of inventing fake 4K options.</p></article>
+      <article><span class="icon">⌁</span><h3>Server-side processing</h3><p>Download requests are signed and resolved server-side, reducing unsafe arbitrary proxy behavior.</p></article>
+    </div>
+
+    <article class="seo-article">
+      <span class="section-label">HOW IT WORKS</span>
+      <h2>Download public Reels and videos in three steps</h2>
+      <div class="steps">
+        <div><b>01</b><h3>Copy the link</h3><p>Open the post or Reel and copy its share link.</p></div>
+        <div><b>02</b><h3>Paste and analyze</h3><p>We validate the domain and ask the extractor for metadata and formats.</p></div>
+        <div><b>03</b><h3>Choose a format</h3><p>Select an available video quality, original media item, or MP3 when supported.</p></div>
+      </div>
+
+      <h2>Why this downloader is built differently</h2>
+      <p>Many download pages show a button first and explain very little about what happens next. {{ app_name }} keeps the workflow transparent: the URL is validated, media metadata is fetched in real time, and the download is generated only when you choose an option. We do not present user-submitted media as our own library.</p>
+      <p>Availability can change because social platforms regularly change their delivery systems, rate limits and authentication rules. A public post that works today may temporarily require a retry or authenticated cookies on a server tomorrow.</p>
+
+      <h2>Frequently asked questions</h2>
+      <div class="faq" id="faq">
+        <details><summary>Does the site host Instagram videos?</summary><p>No permanent media library is created. Downloads are fetched on demand and temporary server files are deleted after the response.</p></details>
+        <details><summary>Can it download private posts?</summary><p>No. The public tool is intended for public media that you have the right to save.</p></details>
+        <details><summary>Why do I sometimes see only “Original”?</summary><p>Some Instagram posts expose only one practical downloadable stream. The interface shows real available choices instead of labeling the same file as several fake resolutions.</p></details>
+        <details><summary>Does MP3 require FFmpeg?</summary><p>Yes. The deployment image includes FFmpeg so audio can be extracted from supported video posts.</p></details>
+        <details><summary>Where does the file go?</summary><p>Your browser controls the final save location, usually the Downloads folder or the device download manager.</p></details>
+      </div>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div><a class="brand footer-brand" href="/"><span class="brand-mark">R</span><span>{{ app_name }}</span></a><p>Independent media utility. Not affiliated with Instagram, Meta or Facebook.</p></div>
+    <div><h3>Tools</h3><a href="/">Reels</a><a href="/video">Video</a><a href="/photo">Photo</a><a href="/audio">Audio</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/dmca">Copyright & DMCA</a><a href="/contact">Contact</a></div>
+  </div>
+  <div class="footer-bottom">© 2026 {{ app_name }}. Download only content you own or have permission to use.</div>
+</footer>
+<script src="/static/app.js?v=1" defer></script>
+</body>
+</html>
