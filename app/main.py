@@ -565,7 +565,7 @@ def _download_with_ytdlp(url: str, title: str, height: int | None, audio_only: b
 async def download_video(token: str, request: Request, height: str = "original"):
     _check_rate(f"d:{_client_ip(request)}", DOWNLOAD_LIMIT_PER_HOUR)
     data = _load_token(token)
-        if height == "original":
+    if height == "original":
         direct_video = data.get("direct_video")
 
         if direct_video and _media_url_allowed(direct_video):
