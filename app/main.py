@@ -256,9 +256,6 @@ def _best_direct_video_url(info: dict[str, Any]) -> str | None:
 
 
 def _safe_title(info: dict[str, Any]) -> str:
-
-
-def _safe_title(info: dict[str, Any]) -> str:
     title = info.get("title") or info.get("description") or "Instagram media"
     title = re.sub(r"\s+", " ", str(title)).strip()
     return title[:160]
