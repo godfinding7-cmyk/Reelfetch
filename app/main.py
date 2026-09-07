@@ -455,6 +455,7 @@ async def analyze(body: AnalyzeBody, request: Request):
             "duration": duration,
             "formats": _format_options(info),
             "media": media,
+            "direct_video": _best_direct_video_url(info),
             "extractor": info.get("extractor_key") or info.get("extractor") or "yt-dlp",
         }
     except HTTPException:
