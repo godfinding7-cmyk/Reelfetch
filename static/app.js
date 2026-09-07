@@ -50,7 +50,14 @@
     const url = input.value.trim();
     if (!url) { status.textContent = 'Paste a link first.'; return; }
     result.hidden = true;
-    qualityList.replaceChildren(); mediaList.replaceChildren();
+
+thumb.hidden = true;
+thumb.removeAttribute('src');
+
+qualityList.replaceChildren();
+mediaList.replaceChildren();
+
+audio.hidden = true;
     status.className = 'status loading'; status.textContent = 'Checking the link and fetching media options…';
     submit.disabled = true;
     try {
